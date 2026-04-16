@@ -1,0 +1,15 @@
+[bot]
+token = REPLACE_WITH_BOT_TOKEN
+admin_chat_id = 0
+
+[telemt]
+api_url = http://154.83.149.180:9091
+metrics_url = http://154.83.149.180:9090
+eu_server_ip = 154.83.149.180
+
+[proxy]
+ru_domain = REPLACE_WITH_YOUR_RU_DOMAIN
+
+[monitor]
+interval = 30
+alert_enabled = true

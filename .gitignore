@@ -1,0 +1,18 @@
+# Bot
+bot/__pycache__/
+bot/*.pyc
+bot/bot.ini
+bot-venv/
+
+# Deploy secrets
+deploy-config.env
+backups/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
