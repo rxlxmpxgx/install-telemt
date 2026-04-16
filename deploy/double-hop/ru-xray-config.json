@@ -55,7 +55,7 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "tg.breachvpn.org",
+          "serverName": "kue.dataconflux.org",
           "publicKey": "EU_PUBLIC_KEY",
           "shortId": "SHORT_ID",
           "fingerprint": "chrome"

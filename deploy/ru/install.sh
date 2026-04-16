@@ -48,17 +48,14 @@ else
     read -rp "VLESS UUID [e9ca9cc3-367d-4095-b4c0-b586829d0f30]: " VLESS_UUID
     VLESS_UUID="${VLESS_UUID:-e9ca9cc3-367d-4095-b4c0-b586829d0f30}"
 
-    read -rp "VLESS Public Key [v1MY9CR9HkAFSqv8kmDHnad4nRGPIo4j88p1sDC22H8]: " VLESS_PUBKEY
-    VLESS_PUBKEY="${VLESS_PUBKEY:-v1MY9CR9HkAFSqv8kmDHnad4nRGPIo4j88p1sDC22H8}"
+    read -rp "VLESS Public Key [IYTnPigU42uYNoHhy-xhEHCxjPJSOxGv-kKDcbvc1Fw]: " VLESS_PUBKEY
+    VLESS_PUBKEY="${VLESS_PUBKEY:-IYTnPigU42uYNoHhy-xhEHCxjPJSOxGv-kKDcbvc1Fw}"
 
     read -rp "Short ID [6ee901fbfd1c3518]: " SHORT_ID
     SHORT_ID="${SHORT_ID:-6ee901fbfd1c3518}"
 
     read -rp "Reality SNI domain [kue.dataconflux.org]: " REALITY_SNI
     REALITY_SNI="${REALITY_SNI:-kue.dataconflux.org}"
-
-    read -rp "XHTTP path [/v1/837cc5]: " XHTTP_PATH
-    XHTTP_PATH="${XHTTP_PATH:-/v1/837cc5}"
 
     read -rp "RU domain (for proxy links, e.g. ru.example.com): " RU_DOMAIN
     [[ -z "${RU_DOMAIN:-}" ]] && error "RU domain is required"
@@ -80,7 +77,6 @@ else
     info "  EU IP:       $EU_IP"
     info "  VLESS UUID:  $VLESS_UUID"
     info "  SNI:         $REALITY_SNI"
-    info "  XHTTP path:  $XHTTP_PATH"
     info "  RU domain:   $RU_DOMAIN"
     echo ""
     read -rp "Continue? [Y/n]: " CONFIRM
@@ -157,12 +153,8 @@ cat > /usr/local/etc/xray/config.json <<XRAYEOF
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "mode": "auto",
-          "path": "${XHTTP_PATH}"
-        },
         "realitySettings": {
           "serverName": "${REALITY_SNI}",
           "publicKey": "${VLESS_PUBKEY}",
@@ -186,7 +178,7 @@ systemctl restart xray
 systemctl enable xray
 sleep 2
 if systemctl is-active --quiet xray; then
-    info "Xray started on :443 → VLESS+Reality → ${EU_IP}:443"
+    info "Xray started on :443 → VLESS+TCP+Reality → ${EU_IP}:443"
 else
     error "Xray failed to start! Check: journalctl -u xray -n 50"
 fi
@@ -201,7 +193,6 @@ VLESS_UUID=${VLESS_UUID}
 VLESS_PUBKEY=${VLESS_PUBKEY}
 SHORT_ID=${SHORT_ID}
 REALITY_SNI=${REALITY_SNI}
-XHTTP_PATH=${XHTTP_PATH}
 RU_DOMAIN=${RU_DOMAIN}
 TELEMT_API_URL=${TELEMT_API_URL:-http://${EU_IP}:9091}
 TELEMT_METRICS_URL=${TELEMT_METRICS_URL:-http://${EU_IP}:9090}
