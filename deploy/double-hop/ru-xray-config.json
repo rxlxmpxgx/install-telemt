@@ -1,0 +1,81 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "public-in",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1",
+        "port": 10444,
+        "network": "tcp"
+      }
+    },
+    {
+      "tag": "tunnel-in",
+      "port": 10444,
+      "listen": "127.0.0.1",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1",
+        "port": 8443,
+        "network": "tcp"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "local-injector",
+      "protocol": "freedom",
+      "settings": {
+        "proxyProtocol": 2
+      }
+    },
+    {
+      "tag": "vless-out",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "EU_SERVER_IP",
+            "port": 443,
+            "users": [
+              {
+                "id": "XRAY_UUID",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "tg.breachvpn.org",
+          "publicKey": "EU_PUBLIC_KEY",
+          "shortId": "SHORT_ID",
+          "fingerprint": "chrome"
+        }
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": ["public-in"],
+        "outboundTag": "local-injector"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["tunnel-in"],
+        "outboundTag": "vless-out"
+      }
+    ]
+  }
+}

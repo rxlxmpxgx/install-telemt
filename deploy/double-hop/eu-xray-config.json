@@ -1,0 +1,59 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "vless-in",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "XRAY_UUID"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "127.0.0.1:4124",
+          "xver": 2,
+          "shortIds": [
+            "SHORT_ID"
+          ],
+          "privateKey": "EU_PRIVATE_KEY",
+          "serverNames": [
+            "tg.breachvpn.org"
+          ]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "tunnel-to-telemt",
+      "protocol": "freedom",
+      "settings": {
+        "destination": "127.0.0.1:8443"
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": ["vless-in"],
+        "outboundTag": "tunnel-to-telemt"
+      }
+    ]
+  }
+}
