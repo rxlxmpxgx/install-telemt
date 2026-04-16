@@ -1,0 +1,15 @@
+services:
+  angie:
+    image: docker.angie.software/angie:minimal
+    container_name: angie
+    restart: always
+    network_mode: host
+    volumes:
+      - ./angie.conf:/etc/angie/angie.conf:ro
+      - ./index.html:/tmp/index.html:ro
+      - angie-data:/var/lib/angie
+      - acme-challenge:/tmp/acme
+
+volumes:
+  angie-data:
+  acme-challenge:

@@ -1,0 +1,87 @@
+# =============================================
+# Telemt Production Config
+# Single-IP setup: Telemt:443 + Angie:4123+80
+# =============================================
+
+# === General ===
+[general]
+use_middle_proxy = true
+# ad_tag = "REPLACE_WITH_YOUR_AD_TAG_FROM_MTProxyBot"
+log_level = "normal"
+fast_mode = true
+rst_on_close = "errors"
+
+[general.modes]
+classic = false
+secure = false
+tls = true
+
+[general.links]
+show = "*"
+public_host = "vpn.YOURDOMAIN.com"
+
+# === Server ===
+[server]
+port = 443
+max_connections = 10000
+
+[server.api]
+enabled = true
+listen = "127.0.0.1:9091"
+whitelist = ["127.0.0.1/32", "::1/128"]
+
+[server.metrics]
+port = 9090
+listen = "127.0.0.1:9090"
+whitelist = ["127.0.0.1/32", "::1/128"]
+
+[[server.listeners]]
+ip = "0.0.0.0"
+
+# === Anti-Censorship & Masking ===
+[censorship]
+tls_domain = "vpn.YOURDOMAIN.com"
+mask = true
+mask_host = "127.0.0.1"
+mask_port = 4123
+mask_proxy_protocol = 1
+tls_emulation = true
+tls_front_dir = "/etc/telemt/tlsfront"
+
+server_hello_delay_min_ms = 8
+server_hello_delay_max_ms = 24
+alpn_enforce = true
+tls_new_session_tickets = 2
+
+mask_shape_hardening = true
+mask_shape_hardening_aggressive_mode = false
+mask_shape_bucket_floor_bytes = 512
+mask_shape_bucket_cap_bytes = 4096
+
+mask_timing_normalization_enabled = true
+mask_timing_normalization_floor_ms = 50
+mask_timing_normalization_ceiling_ms = 500
+
+unknown_sni_action = "mask"
+
+# === Access: Per-User Secrets ===
+# Generate each with: openssl rand -hex 16
+[access.users]
+s1 = "REPLACE_SECRET_1"
+s2 = "REPLACE_SECRET_2"
+s3 = "REPLACE_SECRET_3"
+s4 = "REPLACE_SECRET_4"
+s5 = "REPLACE_SECRET_5"
+
+# === Per-User Ad Tags (optional, for different promoted channels) ===
+# [access.user_ad_tags]
+# s1 = "AD_TAG_FROM_MTProxyBot_1"
+# s3 = "AD_TAG_FROM_MTProxyBot_2"
+
+# === Upstreams (default: direct to Telegram DCs) ===
+# Uncomment for SOCKS5 upstream:
+# [[upstreams]]
+# type = "socks5"
+# address = "1.2.3.4:1080"
+# weight = 1
+# enabled = true
