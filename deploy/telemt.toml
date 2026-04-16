@@ -46,9 +46,9 @@ mask_proxy_protocol = 1
 tls_emulation = true
 tls_front_dir = "/etc/telemt/tlsfront"
 
-server_hello_delay_min_ms = 0
-server_hello_delay_max_ms = 0
-alpn_enforce = false
+server_hello_delay_min_ms = 8
+server_hello_delay_max_ms = 24
+alpn_enforce = true
 tls_new_session_tickets = 0
 
 mask_shape_hardening = true
