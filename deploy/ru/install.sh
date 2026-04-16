@@ -206,22 +206,20 @@ chmod 600 "${PROJECT_DIR}/deploy-config.env"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
-if [[ -d "${REPO_ROOT}/bot/main.py" ]]; then
+if [[ -f "${REPO_ROOT}/bot/main.py" ]]; then
     info "Copying bot code from repo..."
     rm -rf "${BOT_DIR}"
     cp -r "${REPO_ROOT}/bot" "${BOT_DIR}"
-elif [[ -n "${REPO_URL:-}" ]]; then
-    info "Cloning bot code from ${REPO_URL}..."
-    git clone --depth 1 "${REPO_URL}" /tmp/telemt-project-clone 2>/dev/null || true
-    if [[ -d /tmp/telemt-project-clone/bot ]]; then
+elif [[ ! -d "${BOT_DIR}" || ! -f "${BOT_DIR}/main.py" ]]; then
+    info "Downloading bot code from GitHub..."
+    git clone --depth 1 https://github.com/rxlxmpxgx/install-telemt.git /tmp/telemt-project-clone 2>/dev/null || true
+    if [[ -f /tmp/telemt-project-clone/bot/main.py ]]; then
         rm -rf "${BOT_DIR}"
         cp -r /tmp/telemt-project-clone/bot "${BOT_DIR}"
         rm -rf /tmp/telemt-project-clone
     else
-        error "Bot code not found in ${REPO_URL}"
+        error "Bot code not found. Check internet connection."
     fi
-elif [[ ! -d "${BOT_DIR}" ]]; then
-    error "Bot code not found. Run from repo dir or set REPO_URL env var."
 fi
 
 # --- Step 6: Bot configuration ---
