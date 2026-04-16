@@ -24,15 +24,13 @@ public_host = "vpn.YOURDOMAIN.com"
 [server]
 port = 443
 max_connections = 10000
+metrics_port = 9090
+metrics_listen = "127.0.0.1:9090"
+metrics_whitelist = ["127.0.0.1/32", "::1/128"]
 
 [server.api]
 enabled = true
 listen = "127.0.0.1:9091"
-whitelist = ["127.0.0.1/32", "::1/128"]
-
-[server.metrics]
-port = 9090
-listen = "127.0.0.1:9090"
 whitelist = ["127.0.0.1/32", "::1/128"]
 
 [[server.listeners]]
@@ -48,10 +46,10 @@ mask_proxy_protocol = 1
 tls_emulation = true
 tls_front_dir = "/etc/telemt/tlsfront"
 
-server_hello_delay_min_ms = 8
-server_hello_delay_max_ms = 24
-alpn_enforce = true
-tls_new_session_tickets = 2
+server_hello_delay_min_ms = 0
+server_hello_delay_max_ms = 0
+alpn_enforce = false
+tls_new_session_tickets = 0
 
 mask_shape_hardening = true
 mask_shape_hardening_aggressive_mode = false

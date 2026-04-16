@@ -99,15 +99,13 @@ public_host = "${PROXY_DOMAIN}"
 [server]
 port = 443
 max_connections = 10000
+metrics_port = 9090
+metrics_listen = "127.0.0.1:9090"
+metrics_whitelist = ["127.0.0.1/32", "::1/128"$([ -n "$ADMIN_IP" ] && echo ", \"${ADMIN_IP}/32\"")]
 
 [server.api]
 enabled = true
 listen = "127.0.0.1:9091"
-whitelist = ["127.0.0.1/32", "::1/128"$([ -n "$ADMIN_IP" ] && echo ", \"${ADMIN_IP}/32\"")]
-
-[server.metrics]
-port = 9090
-listen = "127.0.0.1:9090"
 whitelist = ["127.0.0.1/32", "::1/128"$([ -n "$ADMIN_IP" ] && echo ", \"${ADMIN_IP}/32\"")]
 
 [[server.listeners]]
@@ -121,10 +119,10 @@ mask_port = 4123
 mask_proxy_protocol = 1
 tls_emulation = true
 tls_front_dir = "/etc/telemt/tlsfront"
-server_hello_delay_min_ms = 8
-server_hello_delay_max_ms = 24
-alpn_enforce = true
-tls_new_session_tickets = 2
+server_hello_delay_min_ms = 0
+server_hello_delay_max_ms = 0
+alpn_enforce = false
+tls_new_session_tickets = 0
 mask_shape_hardening = true
 mask_shape_bucket_floor_bytes = 512
 mask_shape_bucket_cap_bytes = 4096
@@ -178,9 +176,7 @@ http {
     }
 
     resolver 1.1.1.1 8.8.8.8;
-    acme_client le https://acme-v02.api.letsencrypt.org/directory {
-        challenge /tmp/acme;
-    }
+    acme_client le https://acme-v02.api.letsencrypt.org/directory;
 
     server {
         listen 127.0.0.1:4123 ssl proxy_protocol;
@@ -287,7 +283,7 @@ LimitNOFILE=1048576
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-WatchdogSec=60
+WatchdogSec=300
 
 [Install]
 WantedBy=multi-user.target
